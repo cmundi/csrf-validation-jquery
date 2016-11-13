@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    <h4>Here is a little test.</h4>
+    <form id='myForm'>
+        @Html.AntiForgeryToken()
+
+        <label>Name</label>
+        <input type="text" id="in1" name="Name" />
+
+        <label>Age</label>
+        <input type="text" id="in2" name="Age" />
+
+        <label>Authorized</label>
+        <input type="checkbox" id="in3" name="Auth" />
+
+        <label>Remember Me?</label>
+        <input type="checkbox" id="in3" name="Remember" value="true" />
+    </form>
+    <button type="button" id="myButton">Go</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myButton').on('click', function (e) {
+            e.stopPropagation();
+            //alert('clicked!');
+
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var name = $('input[name="Name"]').val();
+            var age = $('input[name="Age"]').val();
+            var formdata =                 {
+                Name: name,
+                Age: age,
+                Remember: true,
+                Selections: [10, 20, 30],
+                __RequestVerificationToken: token
+            };
+
+            $.post(
+                '/Home/Test',
+                formdata,
+                function (data) {
+                    alert('Server says: ' + data);
+                }
+            );
+        })
+
+        function doSomething() {
+            alert("Soemthing!");
+        }
+    });
+</script>
